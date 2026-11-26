@@ -1,0 +1,23 @@
+{
+  "certificateConfig": {
+    "applicationName": "JavaDesktopApp.exe",
+    "version": "1.0.0",
+    "publisher": {
+      "commonName": "Example Software Sp. z o.o.",
+      "organization": "Example Dev",
+      "locality": "Warsaw",
+      "country": "PL"
+    },
+    "signingDetails": {
+      "keystoreType": "PKCS12",
+      "keystorePath": "./certs/my_certificate.pfx",
+      "alias": "java-exe-signer",
+      "timestampServer": "http://digicert.com",
+      "hashAlgorithm": "SHA256"
+    },
+    "validity": {
+      "issuedDate": "2026-01-01T00:00:00Z",
+      "expiryDate": "2029-01-01T00:00:00Z"
+    }
+  }
+}
