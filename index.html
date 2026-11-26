@@ -287,7 +287,6 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
 
-    /* CHEERPJ WEB PLAYER SECTION */
     .section {
       max-width: 1200px;
       margin: 0 auto;
@@ -618,7 +617,7 @@
   <section class="section" id="play-online">
     <div class="section-header">
       <h2>Play <span>MDT MMA</span> In Browser</h2>
-      <p>Runs your Java Swing/AWT JAR natively on Android, iPhone, and PC via CheerpJ WebAssembly</p>
+      <p>Runs your Java Swing/AWT JAR (<code>GRA_MDT.jar</code>) natively on Android, iPhone, and PC via CheerpJ WebAssembly</p>
     </div>
 
     <div class="player-wrapper">
@@ -627,7 +626,7 @@
           <span class="dot red"></span>
           <span class="dot yellow"></span>
           <span class="dot green"></span>
-          <span class="window-title">CheerpJ JVM 17 — /app/dist/app/MDT.jar</span>
+          <span class="window-title">CheerpJ JVM 17 — /app/dist/app/GRA_MDT.jar</span>
         </div>
         <button id="fullscreenBtn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; display: none;">
           ⛶ Fullscreen
@@ -639,7 +638,7 @@
           <img src="./nowa_ikona.ico" onerror="this.src='./ikona.ico'" alt="MDT Gloves" />
           <h3 style="margin-bottom: 10px; font-size: 1.4rem;">Ready to Enter the Cage?</h3>
           <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
-            Tap the button below to boot the Java Virtual Machine inside your browser. Works on smartphones without an .apk file!
+            Tap the button below to boot <strong>GRA_MDT.jar</strong> inside your browser. Works on smartphones without an .apk file!
           </p>
           <button id="launchCheerpJBtn" class="btn btn-play">
             🥊 Launch Game Now
@@ -782,9 +781,8 @@
       noResults.style.display = visibleCount === 0 ? 'block' : 'none';
     });
 
-    // 2. CHEERPJ BROWSER LAUNCHER
-    // IMPORTANT: Replace the JAR path below with the exact .jar filename inside your dist/app/ folder!
-    const JAR_PATH = "/MDT/dist/app/MDT.jar";
+    // 2. CHEERPJ BROWSER LAUNCHER (Pointing directly to /app/dist/app/GRA_MDT.jar on GitHub Pages)
+    const JAR_PATH = "/app/dist/app/GRA_MDT.jar";
 
     const launchBtn = document.getElementById('launchCheerpJBtn');
     const statusText = document.getElementById('statusText');
@@ -799,7 +797,7 @@
 
       try {
         await cheerpjInit({ version: 17 });
-        statusText.innerText = "Creating Octagon Display...";
+        statusText.innerText = "Loading GRA_MDT.jar into Octagon Display...";
         startOverlay.style.display = "none";
         fullscreenBtn.style.display = "inline-flex";
 
@@ -810,7 +808,7 @@
         launchBtn.disabled = false;
         launchBtn.innerText = "🔄 Retry Launch";
         statusText.style.color = "#ff4d5e";
-        statusText.innerText = "Error loading JAR (" + JAR_PATH + "): " + err.message;
+        statusText.innerText = "Error loading GRA_MDT.jar: " + err.message;
       }
     });
 
