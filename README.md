@@ -1,7 +1,7 @@
 <div align="center">
 
   <!-- Your custom MMA gloves logo (upload the file as logo.png to the repository root) -->
-  <img src="./logo.png" alt="MDT MMA App Logo" width="220" />
+  <img src="./ikonka.ico" alt="MDT MMA App Logo" width="220" />
 
   # 🥊 MDT MMA App
 
