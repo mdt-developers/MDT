@@ -1,0 +1,33 @@
+package com.example.JavaDesktopApp;
+
+import java.io.FileInputStream;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.util.Properties;
+
+public class Main {
+    public static void main(String[] args) {
+        try {
+            // 1. Wczytanie ustawień z config.ini
+            Properties config = new Properties();
+            config.load(new FileInputStream("config.ini"));
+
+            // 2. Załadowanie etykiet językowych
+            String lang = config.getProperty("Language", "pl");
+            Labels.init(lang);
+            System.out.println(Labels.get("app.title"));
+
+            // 3. Połączenie z bazą danych (java.sql)
+            String url = "jdbc:mysql://" + config.getProperty("Host") + ":" +
+                         config.getProperty("Port") + "/" + config.getProperty("DatabaseName");
+            
+            try (Connection conn = DriverManager.getConnection(
+                    url, config.getProperty("Username"), config.getProperty("Password"))) {
+                System.out.println(Labels.get("db.connect.success"));
+            }
+
+        } catch (Exception e) {
+            System.err.println("Błąd uruchamiania: " + e.getMessage());
+        }
+    }
+}
