@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MDT MMA App | Official Fight Simulator</title>
+  <title>MDT MMA App | Play Online & Download</title>
   <link rel="icon" type="image/x-icon" href="./nowa_ikona.ico" />
   <link rel="shortcut icon" type="image/x-icon" href="./ikona.ico" />
+  <!-- CheerpJ 5.0 Runtime Loader (Java Swing/AWT in Browser & Mobile) -->
+  <script src="https://cjrtnc.leaningtech.com/5.0/loader.js"></script>
   <style>
     :root {
       --bg-dark: #0a0a0c;
@@ -131,7 +133,7 @@
     .hero {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 70px 5% 50px;
+      padding: 60px 5% 40px;
       display: grid;
       grid-template-columns: 1.1fr 0.9fr;
       align-items: center;
@@ -155,7 +157,7 @@
     }
 
     .hero h1 {
-      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-size: clamp(2.5rem, 5vw, 4.1rem);
       font-weight: 900;
       line-height: 1.08;
       text-transform: uppercase;
@@ -170,15 +172,15 @@
 
     .hero p {
       color: var(--text-muted);
-      font-size: 1.1rem;
-      margin-bottom: 32px;
+      font-size: 1.08rem;
+      margin-bottom: 30px;
       max-width: 560px;
     }
 
     .cta-group {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
+      gap: 14px;
     }
 
     .btn {
@@ -186,15 +188,16 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-      padding: 15px 28px;
+      padding: 14px 24px;
       border-radius: 10px;
       font-weight: 800;
-      font-size: 1rem;
+      font-size: 0.95rem;
       text-decoration: none;
       text-transform: uppercase;
       letter-spacing: 0.5px;
       transition: all 0.25s ease;
       cursor: pointer;
+      border: none;
     }
 
     .btn-primary {
@@ -207,6 +210,18 @@
     .btn-primary:hover {
       transform: translateY(-3px);
       box-shadow: 0 12px 32px rgba(230, 25, 46, 0.7);
+    }
+
+    .btn-play {
+      background: linear-gradient(135deg, #1e62d0, #134291);
+      color: #fff;
+      box-shadow: 0 8px 25px rgba(30, 98, 208, 0.4);
+      border: 1px solid #4d8dff;
+    }
+
+    .btn-play:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(30, 98, 208, 0.65);
     }
 
     .btn-secondary {
@@ -229,8 +244,8 @@
     }
 
     .octagon-ring {
-      width: 340px;
-      height: 340px;
+      width: 320px;
+      height: 320px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(230, 25, 46, 0.22) 0%, rgba(20, 20, 25, 0.92) 70%);
       border: 2px solid rgba(230, 25, 46, 0.45);
@@ -249,8 +264,8 @@
     }
 
     .octagon-ring img {
-      width: 170px;
-      height: 170px;
+      width: 160px;
+      height: 160px;
       object-fit: contain;
       filter: drop-shadow(0 12px 20px rgba(0,0,0,0.8));
       transition: transform 0.3s ease;
@@ -265,26 +280,27 @@
       background: var(--mdt-red);
       color: #fff;
       font-weight: 900;
-      font-size: 1.15rem;
-      padding: 5px 24px;
+      font-size: 1.1rem;
+      padding: 5px 22px;
       border-radius: 50px;
       letter-spacing: 3px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.6);
     }
 
+    /* CHEERPJ WEB PLAYER SECTION */
     .section {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 60px 5%;
+      padding: 55px 5%;
     }
 
     .section-header {
       text-align: center;
-      margin-bottom: 45px;
+      margin-bottom: 35px;
     }
 
     .section-header h2 {
-      font-size: 2.35rem;
+      font-size: 2.3rem;
       font-weight: 900;
       text-transform: uppercase;
       letter-spacing: 0.5px;
@@ -299,6 +315,86 @@
       margin-top: 8px;
     }
 
+    .player-wrapper {
+      background: var(--bg-card);
+      border: 1px solid rgba(30, 98, 208, 0.5);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 20px 55px rgba(0, 0, 0, 0.85);
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .window-dots {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .window-title {
+      margin-left: 8px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    #gameContainer {
+      width: 100%;
+      height: 560px;
+      background: #070709;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border: 1px dashed #2d2d3a;
+      touch-action: none;
+    }
+
+    #startOverlay {
+      text-align: center;
+      padding: 24px;
+      max-width: 480px;
+      z-index: 10;
+    }
+
+    #startOverlay img {
+      width: 90px;
+      height: 90px;
+      margin-bottom: 16px;
+      filter: drop-shadow(0 0 15px var(--mdt-red-glow));
+    }
+
+    #statusText {
+      margin-top: 14px;
+      font-size: 0.9rem;
+      color: #60a5fa;
+      font-family: monospace;
+    }
+
+    .mobile-hint {
+      margin-top: 12px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
     .screenshot-frame {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
@@ -309,30 +405,9 @@
       overflow: hidden;
     }
 
-    .window-bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-bottom: 12px;
-      margin-bottom: 12px;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .dot { width: 12px; height: 12px; border-radius: 50%; }
-    .dot.red { background: #ff5f56; }
-    .dot.yellow { background: #ffbd2e; }
-    .dot.green { background: #27c93f; }
-
-    .window-title {
-      margin-left: 10px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-family: monospace;
-    }
-
     .screenshot-frame img {
       width: 100%;
-      max-height: 540px;
+      max-height: 520px;
       object-fit: contain;
       border-radius: 8px;
       display: block;
@@ -481,8 +556,9 @@
       }
       .hero p { margin: 0 auto 30px; }
       .cta-group { justify-content: center; }
-      .octagon-ring { width: 270px; height: 270px; }
-      .octagon-ring img { width: 135px; height: 135px; }
+      .octagon-ring { width: 250px; height: 250px; }
+      .octagon-ring img { width: 125px; height: 125px; }
+      #gameContainer { height: 420px; }
     }
   </style>
 </head>
@@ -498,30 +574,34 @@
       <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z" />
       </svg>
-      <input type="text" id="searchInput" placeholder="Search features, SQL, .exe, controls..." />
+      <input type="text" id="searchInput" placeholder="Search features, browser play, SQL, .exe..." />
     </div>
 
     <nav class="nav-links">
-      <a href="#preview">Octagon</a>
+      <a href="#play-online">Play in Browser</a>
+      <a href="#preview">Arena</a>
       <a href="#features">Features</a>
-      <a href="#download">Release 1.0.0</a>
-      <a href="https://github.com/mdt-developers/MDT" target="_blank" rel="noopener">GitHub Repo</a>
+      <a href="#download">Download</a>
+      <a href="https://github.com/mdt-developers/MDT" target="_blank" rel="noopener">GitHub</a>
     </nav>
   </header>
 
   <section class="hero">
     <div>
-      <div class="badge-version">🔥 Official Release MDT-1.0.0 Live</div>
+      <div class="badge-version">📱 Mobile & Desktop Web Ready</div>
       <h1>Step Into The <span>MDT Octagon</span></h1>
       <p>
-        Experience raw Mixed Martial Arts action in <strong>MDT MMA App</strong>. Build your fighter, master striking and grappling, manage career stats powered by SQL, and dominate the championship cage on Windows.
+        Play <strong>MDT MMA App</strong> directly inside your mobile or desktop browser with zero installation—or download the native Windows <code>.exe</code> release. Powered by Java & CheerpJ WebAssembly.
       </p>
       <div class="cta-group">
+        <a href="#play-online" class="btn btn-play">
+          ▶ Play in Browser (Mobile / PC)
+        </a>
         <a href="https://github.com/mdt-developers/MDT/releases/download/MDT/mdt-game.zip" class="btn btn-primary">
-          ⬇ Download Game (ZIP)
+          ⬇ Download .EXE (ZIP)
         </a>
         <a href="https://github.com/mdt-developers/MDT" target="_blank" rel="noopener" class="btn btn-secondary">
-          ★ View GitHub Repository
+          ★ GitHub Repo
         </a>
       </div>
     </div>
@@ -534,6 +614,46 @@
     </div>
   </section>
 
+  <!-- INTERACTIVE CHEERPJ BROWSER PLAYER (NO .APK NEEDED ON MOBILE) -->
+  <section class="section" id="play-online">
+    <div class="section-header">
+      <h2>Play <span>MDT MMA</span> In Browser</h2>
+      <p>Runs your Java Swing/AWT JAR natively on Android, iPhone, and PC via CheerpJ WebAssembly</p>
+    </div>
+
+    <div class="player-wrapper">
+      <div class="window-bar">
+        <div class="window-dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="window-title">CheerpJ JVM 17 — /app/dist/app/MDT.jar</span>
+        </div>
+        <button id="fullscreenBtn" class="btn btn-secondary" style="padding: 6px 14px; font-size: 0.8rem; display: none;">
+          ⛶ Fullscreen
+        </button>
+      </div>
+
+      <div id="gameContainer">
+        <div id="startOverlay">
+          <img src="./nowa_ikona.ico" onerror="this.src='./ikona.ico'" alt="MDT Gloves" />
+          <h3 style="margin-bottom: 10px; font-size: 1.4rem;">Ready to Enter the Cage?</h3>
+          <p style="color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px;">
+            Tap the button below to boot the Java Virtual Machine inside your browser. Works on smartphones without an .apk file!
+          </p>
+          <button id="launchCheerpJBtn" class="btn btn-play">
+            🥊 Launch Game Now
+          </button>
+          <div id="statusText"></div>
+        </div>
+      </div>
+
+      <p class="mobile-hint">
+        💡 <strong>Mobile Tip:</strong> Rotate your phone to landscape mode for the widest octagon view. Touch taps automatically act as mouse clicks inside the Java window.
+      </p>
+    </div>
+  </section>
+
   <section class="section" id="preview">
     <div class="section-header">
       <h2>Inside The <span>Arena</span></h2>
@@ -542,10 +662,12 @@
 
     <div class="screenshot-frame">
       <div class="window-bar">
-        <span class="dot red"></span>
-        <span class="dot yellow"></span>
-        <span class="dot green"></span>
-        <span class="window-title">GRA_MDT.exe — Live Octagon View</span>
+        <div class="window-dots">
+          <span class="dot red"></span>
+          <span class="dot yellow"></span>
+          <span class="dot green"></span>
+          <span class="window-title">GRA_MDT.exe — Live Octagon View</span>
+        </div>
       </div>
       <img src="./screenshot.png" alt="MDT MMA Gameplay Screenshot" />
     </div>
@@ -557,9 +679,15 @@
       <p>Filter core features using the search bar above</p>
     </div>
 
-    <div id="noResults">No matching features found. Try searching for "Java", "SQL", "Octagon", or "EXE".</div>
+    <div id="noResults">No matching features found. Try searching for "Browser", "Mobile", "SQL", or "EXE".</div>
 
     <div class="grid" id="featuresGrid">
+      <div class="card searchable-item" data-keywords="browser mobile android iphone cheerpj webassembly no apk">
+        <div class="card-icon">📱</div>
+        <h3>No .APK Needed (Mobile Web)</h3>
+        <p>Powered by CheerpJ 5.0 WebAssembly. Android and iOS players can launch the full Java Swing game directly in Safari or Chrome.</p>
+      </div>
+
       <div class="card searchable-item" data-keywords="octagon fight simulator red blue corner knockout mma">
         <div class="card-icon">🥊</div>
         <h3>Octagon Fight Engine</h3>
@@ -584,12 +712,6 @@
         <p>Compiled for instant desktop play with <code>GRA_MDT.exe</code> and a bundled Java 17+ runtime environment—zero extra setup required.</p>
       </div>
 
-      <div class="card searchable-item" data-keywords="language polish english localization properties ini cfg">
-        <div class="card-icon">🌐</div>
-        <h3>Multi-Language & Config</h3>
-        <p>Full English and Polish support via Java Resource Bundles alongside customizable <code>.ini</code> and <code>.cfg</code> launch parameters.</p>
-      </div>
-
       <div class="card searchable-item" data-keywords="open source mpl 2.0 github mdt-developers code">
         <div class="card-icon">⚡</div>
         <h3>Open Source (MPL-2.0)</h3>
@@ -603,7 +725,7 @@
       <div class="release-info">
         <h3>Download <span>MDT-1.0.0</span></h3>
         <p>
-          Grab the complete game archive (<code>mdt-game.zip</code>) or individual release assets directly from GitHub Releases. Extract the folder and launch <strong>GRA_MDT.exe</strong> to enter the cage.
+          Prefer offline desktop play? Grab the complete Windows archive (<code>mdt-game.zip</code>) or individual release assets directly from GitHub Releases and launch <strong>GRA_MDT.exe</strong>.
         </p>
       </div>
 
@@ -637,6 +759,7 @@
   </footer>
 
   <script>
+    // 1. LIVE SEARCH FILTER
     const searchInput = document.getElementById('searchInput');
     const cards = document.querySelectorAll('.searchable-item');
     const noResults = document.getElementById('noResults');
@@ -657,6 +780,46 @@
       });
 
       noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+
+    // 2. CHEERPJ BROWSER LAUNCHER
+    // IMPORTANT: Replace the JAR path below with the exact .jar filename inside your dist/app/ folder!
+    const JAR_PATH = "/MDT/dist/app/MDT.jar";
+
+    const launchBtn = document.getElementById('launchCheerpJBtn');
+    const statusText = document.getElementById('statusText');
+    const startOverlay = document.getElementById('startOverlay');
+    const gameContainer = document.getElementById('gameContainer');
+    const fullscreenBtn = document.getElementById('fullscreenBtn');
+
+    launchBtn.addEventListener('click', async () => {
+      launchBtn.disabled = true;
+      launchBtn.innerText = "⏳ Booting Java JVM...";
+      statusText.innerText = "Initializing CheerpJ WebAssembly Runtime (Java 17)...";
+
+      try {
+        await cheerpjInit({ version: 17 });
+        statusText.innerText = "Creating Octagon Display...";
+        startOverlay.style.display = "none";
+        fullscreenBtn.style.display = "inline-flex";
+
+        cheerpjCreateDisplay(-1, -1, gameContainer);
+        await cheerpjRunJar(JAR_PATH);
+      } catch (err) {
+        startOverlay.style.display = "block";
+        launchBtn.disabled = false;
+        launchBtn.innerText = "🔄 Retry Launch";
+        statusText.style.color = "#ff4d5e";
+        statusText.innerText = "Error loading JAR (" + JAR_PATH + "): " + err.message;
+      }
+    });
+
+    fullscreenBtn.addEventListener('click', () => {
+      if (gameContainer.requestFullscreen) {
+        gameContainer.requestFullscreen();
+      } else if (gameContainer.webkitRequestFullscreen) {
+        gameContainer.webkitRequestFullscreen();
+      }
     });
   </script>
 
