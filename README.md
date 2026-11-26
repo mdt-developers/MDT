@@ -8,10 +8,10 @@
   **A modern Mixed Martial Arts (MMA) desktop game and fight simulator built in Java.**
 
   <p>
-    <img src="https://shields.io" alt="Java" />
-    <img src="https://shields.io" alt="Windows" />
-    <img src="https://shields.io" alt="License" />
-    <img src="https://shields.io" alt="Status" />
+    <img src="https://shields.io/java" alt="Java" />
+    <img src="https://shields.io/windows" alt="Windows" />
+    <img src="https://shields.io/mozila" alt="License" />
+    <img src="https://shields.io/status" alt="Status" />
   </p>
 
   <p>
