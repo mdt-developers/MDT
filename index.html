@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MDT MMA App | Official Fight Simulator</title>
+  <link rel="icon" type="image/x-icon" href="./nowa_ikona.ico" />
+  <link rel="shortcut icon" type="image/x-icon" href="./ikona.ico" />
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --bg-card: #141419;
+      --mdt-red: #e6192e;
+      --mdt-red-glow: rgba(230, 25, 46, 0.45);
+      --mdt-blue: #1e62d0;
+      --text-main: #f4f4f6;
+      --text-muted: #9ca3af;
+      --border-color: #262630;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 50% 0%, rgba(230, 25, 46, 0.2) 0%, transparent 55%),
+        radial-gradient(circle at 85% 30%, rgba(30, 98, 208, 0.14) 0%, transparent 45%);
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 10, 12, 0.88);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 14px 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 8px var(--mdt-red-glow));
+    }
+
+    .brand-title {
+      font-size: 1.55rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .brand-title span {
+      color: var(--mdt-red);
+    }
+
+    .search-box {
+      position: relative;
+      flex: 1;
+      max-width: 380px;
+      min-width: 220px;
+    }
+
+    .search-box input {
+      width: 100%;
+      background: #1a1a22;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 10px 16px 10px 40px;
+      border-radius: 8px;
+      font-size: 0.92rem;
+      outline: none;
+      transition: all 0.25s ease;
+    }
+
+    .search-box input:focus {
+      border-color: var(--mdt-red);
+      box-shadow: 0 0 12px var(--mdt-red-glow);
+    }
+
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      stroke: var(--text-muted);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nav-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text-main);
+    }
+
+    .hero {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 70px 5% 50px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      align-items: center;
+      gap: 50px;
+    }
+
+    .badge-version {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(230, 25, 46, 0.15);
+      border: 1px solid rgba(230, 25, 46, 0.4);
+      color: #ff4d5e;
+      padding: 6px 14px;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 900;
+      line-height: 1.08;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: var(--mdt-red);
+      text-shadow: 0 0 25px var(--mdt-red-glow);
+    }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      margin-bottom: 32px;
+      max-width: 560px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 28px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1rem;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      transition: all 0.25s ease;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #e6192e, #b30e1f);
+      color: #fff;
+      box-shadow: 0 8px 25px var(--mdt-red-glow);
+      border: 1px solid #ff4757;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 32px rgba(230, 25, 46, 0.7);
+    }
+
+    .btn-secondary {
+      background: #1a1a22;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      background: #24242f;
+      border-color: #4b4b5e;
+      transform: translateY(-3px);
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .octagon-ring {
+      width: 340px;
+      height: 340px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(230, 25, 46, 0.22) 0%, rgba(20, 20, 25, 0.92) 70%);
+      border: 2px solid rgba(230, 25, 46, 0.45);
+      box-shadow: 0 0 60px rgba(230, 25, 46, 0.25), inset 0 0 40px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: pulseGlow 4s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 40px rgba(230, 25, 46, 0.2); }
+      to { box-shadow: 0 0 75px rgba(230, 25, 46, 0.45); }
+    }
+
+    .octagon-ring img {
+      width: 170px;
+      height: 170px;
+      object-fit: contain;
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.8));
+      transition: transform 0.3s ease;
+    }
+
+    .octagon-ring:hover img {
+      transform: scale(1.08) rotate(-4deg);
+    }
+
+    .mdt-stamp {
+      margin-top: 12px;
+      background: var(--mdt-red);
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.15rem;
+      padding: 5px 24px;
+      border-radius: 50px;
+      letter-spacing: 3px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    }
+
+    .section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 5%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 45px;
+    }
+
+    .section-header h2 {
+      font-size: 2.35rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .section-header h2 span {
+      color: var(--mdt-red);
+    }
+
+    .section-header p {
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    .screenshot-frame {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 16px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .window-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .dot { width: 12px; height: 12px; border-radius: 50%; }
+    .dot.red { background: #ff5f56; }
+    .dot.yellow { background: #ffbd2e; }
+    .dot.green { background: #27c93f; }
+
+    .window-title {
+      margin-left: 10px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .screenshot-frame img {
+      width: 100%;
+      max-height: 540px;
+      object-fit: contain;
+      border-radius: 8px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 28px;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      border-color: var(--mdt-red);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(230, 25, 46, 0.14);
+      border: 1px solid rgba(230, 25, 46, 0.3);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+    }
+
+    .card p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .release-box {
+      background: linear-gradient(145deg, #16161e, #0f0f14);
+      border: 1px solid rgba(230, 25, 46, 0.4);
+      border-radius: 16px;
+      padding: 36px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 30px;
+    }
+
+    .release-info h3 {
+      font-size: 1.9rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .release-info p {
+      color: var(--text-muted);
+      max-width: 540px;
+    }
+
+    .asset-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      min-width: 260px;
+    }
+
+    .asset-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #1f1f29;
+      border: 1px solid var(--border-color);
+      padding: 12px 18px;
+      border-radius: 8px;
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: all 0.2s;
+    }
+
+    .asset-link:hover {
+      border-color: var(--mdt-red);
+      background: #272734;
+    }
+
+    .asset-size {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      background: #121217;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+
+    #noResults {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 40px 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-top: 40px;
+    }
+
+    .footer-logos {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .footer-logos img {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 40px;
+      }
+      .hero p { margin: 0 auto 30px; }
+      .cta-group { justify-content: center; }
+      .octagon-ring { width: 270px; height: 270px; }
+      .octagon-ring img { width: 135px; height: 135px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="brand">
+      <img src="./nowa_ikona.ico" onerror="this.src='./ikona.ico'" alt="MDT Logo" />
+      <div class="brand-title">MDT <span>MMA</span></div>
+    </a>
+
+    <div class="search-box">
+      <svg fill="none" viewBox="0 0 24 24" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.15 6.15z" />
+      </svg>
+      <input type="text" id="searchInput" placeholder="Search features, SQL, .exe, controls..." />
+    </div>
+
+    <nav class="nav-links">
+      <a href="#preview">Octagon</a>
+      <a href="#features">Features</a>
+      <a href="#download">Release 1.0.0</a>
+      <a href="https://github.com/mdt-developers/MDT" target="_blank" rel="noopener">GitHub Repo</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <div class="badge-version">🔥 Official Release MDT-1.0.0 Live</div>
+      <h1>Step Into The <span>MDT Octagon</span></h1>
+      <p>
+        Experience raw Mixed Martial Arts action in <strong>MDT MMA App</strong>. Build your fighter, master striking and grappling, manage career stats powered by SQL, and dominate the championship cage on Windows.
+      </p>
+      <div class="cta-group">
+        <a href="https://github.com/mdt-developers/MDT/releases/download/MDT/mdt-game.zip" class="btn btn-primary">
+          ⬇ Download Game (ZIP)
+        </a>
+        <a href="https://github.com/mdt-developers/MDT" target="_blank" rel="noopener" class="btn btn-secondary">
+          ★ View GitHub Repository
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="octagon-ring">
+        <img src="./nowa_ikona.ico" onerror="this.src='./ikona.ico'" alt="MDT Red MMA Gloves" />
+        <div class="mdt-stamp">MDT FIGHT CLUB</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="preview">
+    <div class="section-header">
+      <h2>Inside The <span>Arena</span></h2>
+      <p>Inspired by championship MMA broadcasts with classic red vs. blue corner action</p>
+    </div>
+
+    <div class="screenshot-frame">
+      <div class="window-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="window-title">GRA_MDT.exe — Live Octagon View</span>
+      </div>
+      <img src="./screenshot.png" alt="MDT MMA Gameplay Screenshot" />
+    </div>
+  </section>
+
+  <section class="section" id="features">
+    <div class="section-header">
+      <h2>Game <span>Mechanics & Tech</span></h2>
+      <p>Filter core features using the search bar above</p>
+    </div>
+
+    <div id="noResults">No matching features found. Try searching for "Java", "SQL", "Octagon", or "EXE".</div>
+
+    <div class="grid" id="featuresGrid">
+      <div class="card searchable-item" data-keywords="octagon fight simulator red blue corner knockout mma">
+        <div class="card-icon">🥊</div>
+        <h3>Octagon Fight Engine</h3>
+        <p>Step onto the official red MDT canvas. Compete in intense red vs. blue corner bouts with dynamic stamina, striking exchanges, and decisive knockouts.</p>
+      </div>
+
+      <div class="card searchable-item" data-keywords="career training striking wrestling bjj stats progression">
+        <div class="card-icon">🏋️</div>
+        <h3>Fighter Career & Training</h3>
+        <p>Develop your athlete from amateur contender to world champion by upgrading boxing, wrestling, Brazilian Jiu-Jitsu (BJJ), and conditioning attributes.</p>
+      </div>
+
+      <div class="card searchable-item" data-keywords="sql database jdbc records rankings history save">
+        <div class="card-icon">🗄️</div>
+        <h3>SQL Career Database</h3>
+        <p>Powered by Java JDBC (<code>java.sql</code>) to securely store fight records, championship belts, fighter profiles, and promotion rankings.</p>
+      </div>
+
+      <div class="card searchable-item" data-keywords="windows exe executable jre runtime java 17">
+        <div class="card-icon">🖥️</div>
+        <h3>Native Windows .EXE</h3>
+        <p>Compiled for instant desktop play with <code>GRA_MDT.exe</code> and a bundled Java 17+ runtime environment—zero extra setup required.</p>
+      </div>
+
+      <div class="card searchable-item" data-keywords="language polish english localization properties ini cfg">
+        <div class="card-icon">🌐</div>
+        <h3>Multi-Language & Config</h3>
+        <p>Full English and Polish support via Java Resource Bundles alongside customizable <code>.ini</code> and <code>.cfg</code> launch parameters.</p>
+      </div>
+
+      <div class="card searchable-item" data-keywords="open source mpl 2.0 github mdt-developers code">
+        <div class="card-icon">⚡</div>
+        <h3>Open Source (MPL-2.0)</h3>
+        <p>Explore the full Java source code, custom assets, and build scripts directly on the official <strong>mdt-developers/MDT</strong> GitHub repository.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="download">
+    <div class="release-box">
+      <div class="release-info">
+        <h3>Download <span>MDT-1.0.0</span></h3>
+        <p>
+          Grab the complete game archive (<code>mdt-game.zip</code>) or individual release assets directly from GitHub Releases. Extract the folder and launch <strong>GRA_MDT.exe</strong> to enter the cage.
+        </p>
+      </div>
+
+      <div class="asset-buttons">
+        <a href="https://github.com/mdt-developers/MDT/releases/download/MDT/mdt-game.zip" class="asset-link">
+          <span>📦 mdt-game.zip (Full Package)</span>
+          <span class="asset-size">53.4 MB</span>
+        </a>
+        <a href="https://github.com/mdt-developers/MDT/releases/download/MDT/GRA_MDT.exe" class="asset-link">
+          <span>🎮 GRA_MDT.exe (Launcher)</span>
+          <span class="asset-size">444 KB</span>
+        </a>
+        <a href="https://github.com/mdt-developers/MDT/releases/download/MDT/modules" class="asset-link">
+          <span>⚙️ runtime/lib/modules</span>
+          <span class="asset-size">115 MB</span>
+        </a>
+        <a href="https://github.com/mdt-developers/MDT/releases/tag/MDT" target="_blank" rel="noopener" class="asset-link">
+          <span>🔗 View All Release Notes</span>
+          <span class="asset-size">GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-logos">
+      <img src="./ikona.ico" alt="MDT Classic Icon" />
+      <img src="./nowa_ikona.ico" alt="MDT Gloves Icon" />
+    </div>
+    <p><strong>MDT MMA App</strong> • Developed by <a href="https://github.com/mdt-developers/MDT" style="color: #e6192e; text-decoration: none;">mdt-developers</a> • Licensed under MPL-2.0</p>
+  </footer>
+
+  <script>
+    const searchInput = document.getElementById('searchInput');
+    const cards = document.querySelectorAll('.searchable-item');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function () {
+      const query = this.value.toLowerCase().trim();
+      let visibleCount = 0;
+
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        const keywords = card.getAttribute('data-keywords').toLowerCase();
+        if (text.includes(query) || keywords.includes(query)) {
+          card.style.display = 'block';
+          visibleCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    });
+  </script>
+
+</body>
+</html>
